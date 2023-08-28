@@ -1,3 +1,6 @@
 [submodule "lib/Adafruit_Motor_Shield_V2_Library"]
 	path = lib/Adafruit_Motor_Shield_V2_Library
 	url = https://github.com/adafruit/Adafruit_Motor_Shield_V2_Library.git
+[submodule "lib/TaskScheduler"]
+	path = lib/TaskScheduler
+	url = https://github.com/arkhipenko/TaskScheduler.git
