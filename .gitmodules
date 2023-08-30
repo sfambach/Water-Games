@@ -4,3 +4,6 @@
 [submodule "lib/TaskScheduler"]
 	path = lib/TaskScheduler
 	url = https://github.com/arkhipenko/TaskScheduler.git
+[submodule "lib/Bounce2"]
+	path = lib/Bounce2
+	url = https://github.com/thomasfredericks/Bounce2.git
