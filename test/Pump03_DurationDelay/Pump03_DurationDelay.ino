@@ -16,9 +16,9 @@
 #endif
 
 /** PUMPS ****************************************************************************************/
-#include "Pump.h"
 // create/init the shield and pumps
 #include <Adafruit_MotorShield.h>
+#include "Pump.h"
 Adafruit_MotorShield motorShield = Adafruit_MotorShield();
 #define PUMPS_COUNT_MAX 4
 #define PUMPS_SPEED_MAX 255
