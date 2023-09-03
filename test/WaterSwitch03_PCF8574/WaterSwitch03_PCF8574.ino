@@ -6,10 +6,12 @@
 ************************************************/
 
 #include <stdlib.h>
+* Author: S. Fambach
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
 #else
 #include "WProgram.h"
+* Author: S. Fambach
 #endif
 
 // allow debug output
