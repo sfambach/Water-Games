@@ -7,3 +7,6 @@
 [submodule "lib/Bounce2"]
 	path = lib/Bounce2
 	url = https://github.com/thomasfredericks/Bounce2.git
+[submodule "lib/PCF8574"]
+	path = lib/PCF8574
+	url = https://github.com/RobTillaart/PCF8574.git
