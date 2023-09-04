@@ -18,11 +18,12 @@
 // #include "Pump.h"
 #include "AbstractPump.h"
 #include "PumpMotorV2.h"
+#include "PumpMotorV1.h"
 #include "PumpRelay.h"
 
 // create/init the shield and pumps
-#include <Adafruit_MotorShield.h>
-Adafruit_MotorShield motorShield = Adafruit_MotorShield();
+
+
 
 // create 4 pumps
 /*AbstractPump* pumps[] = { new PumpMotorV2(motorShield.getMotor(1)),
@@ -34,7 +35,8 @@ Adafruit_MotorShield motorShield = Adafruit_MotorShield();
 AbstractPump* pumps[] = { new PumpRelay(7),
  new PumpRelay(8),
  new PumpRelay(13),
- new PumpRelay(6),
+ new PumpMotorV1(1),
+ new PumpMotorV2(1)
 };
 /** init the pumps please call in setup functions 
 
@@ -49,11 +51,7 @@ void setup() {
   DEBUG_PRINTLN("Setup");
 
   /*DEBUG_PRINT("Init Pumps: ");
-  if (!motorShield.begin()) {
-    DEBUG_PRINTLN("ERROR: Could not find Motor Shield. Check wiring.  Program will stop here!");
-    while (1)
-      ;
-  }*/
+ */
 
   organ.init();
   DEBUG_PRINTLN("Success!");
