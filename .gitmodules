@@ -10,3 +10,6 @@
 [submodule "lib/PCF8574"]
 	path = lib/PCF8574
 	url = https://github.com/RobTillaart/PCF8574.git
+[submodule "lib/Adafruit-Motor-Shield-library"]
+	path = lib/Adafruit-Motor-Shield-library
+	url = https://github.com/adafruit/Adafruit-Motor-Shield-library.git
