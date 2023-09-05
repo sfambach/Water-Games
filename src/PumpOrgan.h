@@ -3,14 +3,16 @@
 #ifndef PUMP_ORGAM_H
 #define PUMP_ORGAM_H
 
-#define USE_PROGEMEM
+//#define USE_PROGEMEM
 #define INCLUDE_DEFAULT_PLAYLISTS
+
+#include "AbstractPump.h"
 
 
 #ifdef INCLUDE_DEFAULT_PLAYLISTS
 #include "PumpOrganDefaultPlaylists.h"
 #endif
-#include "Pump.h"
+
 
 
 class PumpOrgan {
@@ -19,16 +21,17 @@ private:
   uint16_t _currentStep = 0;
   OrganProgram* _currentProgram;
 
-  Pump* _pumps;
+  
   uint8_t _pumpCount;
   long _stepDuration = 1000;  // default one sec
   long _stepStartTS = 0;
+  AbstractPump** _pumps;
 
 public:
 
   /** default constructor 
   */
-  PumpOrgan(Pump* pumps, uint8_t pumpCount) {
+  PumpOrgan(AbstractPump* pumps[], uint8_t pumpCount) {
     _pumps = pumps;
     _pumpCount = pumpCount;
     DEBUG_PRINTLN("setup size of pumps " + String(_pumpCount));
@@ -44,6 +47,7 @@ public:
   /** set a new programm */
   void setCurrentProgram(OrganProgram* program) {
     _currentProgram = program;
+    reset();
   }
 
   /** reset the current program 
@@ -70,19 +74,19 @@ public:
         int16_t currentPumpSpeed;
         
         // do nothing while the pump is blocked 
-        if(_pumps[pumpIdx].isBlocked()){
+        if(_pumps[pumpIdx]->isBlocked()){
           continue;
         }
 
 #ifdef USE_PROGEMEM
         currentPumpSpeed = pgm_read_word_near(_currentProgram->_content + (step * _pumpCount) + pumpIdx);
 #else
-        currentPumpSpeed = _currentProgram->_content[f3 + (step * _pumpCount) + pumpIdx];
+        currentPumpSpeed = _currentProgram->_content[ (step * _pumpCount) + pumpIdx];
 #endif
         
 
 
-        _pumps[pumpIdx].setSpeed(currentPumpSpeed);
+        _pumps[pumpIdx]->setSpeed(currentPumpSpeed);
 
 
         DEBUG_PRINT(String(currentPumpSpeed) + ",");
@@ -99,6 +103,9 @@ public:
     long duration = millis() - _stepStartTS;
     if (duration > _stepDuration) {
       _currentStep++;
+      if(_currentStep == _currentProgram->_stepCount){
+        _currentStep = 0;
+      }
       _stepStartTS = millis();
       playStep(_currentStep);
     }
@@ -107,8 +114,8 @@ public:
   /** call during setup to init the pumps */
   void init() {
     // init the pumps
-    for (int i = 0; i < sizeof(_pumpCount); i++) {
-      _pumps[i].init();
+    for (int i = 0; i < _pumpCount; i++) {
+      _pumps[i]->init();
     }
   }
 };

@@ -8,23 +8,25 @@
 
 
 
-#include <Adafruit_MotorShield.h>
+#include <AFMotor.h>
 #define MAX_SPEED 255
 
-class Pump : public AbstractPump{
+class PumpMotorV1 : public AbstractPump {
 
 
 private:
- Adafruit_DCMotor* _motor;
+  AF_DCMotor &_motor;
+  uint8_t _motorNumber;
 public:
 
 
-  Pump(Adafruit_DCMotor* motor, int16_t minSpeedForward = 50, int16_t minSpeedBackward = -50)
-    : _motor(motor), AbstractPump(minSpeedForward,minSpeedBackward) {
-    if (!motor) {
-      DEBUG_PRINTLN("Motor must be set!");
+  PumpMotorV1(uint8_t motorNumber, int16_t minSpeedForward = 50, int16_t minSpeedBackward = -50)
+    : _motorNumber(motorNumber), AbstractPump(minSpeedForward, minSpeedBackward) {
+    if (motorNumber < 1 || motorNumber > 4) {
+      DEBUG_PRINTLN("Motor number must be between 1 and 4!");
       exit(EXIT_FAILURE);
     }
+    _motor = AF_DCMotor(motorNumber);
   }
 
   virtual void setSpeed(int16_t speed) override {
@@ -32,33 +34,33 @@ public:
     _curSpeed = speed;
 
     if (speed > 0) {
-      _motor->run(FORWARD);
+      _motor.run(FORWARD);
       //DEBUG_PRINT("..FORWARD " +String(speed));
       // normalize speed start with the minimum value
-      _motor->setSpeed(map(speed, 0, MAX_SPEED, 0 + _minSpeedForward, _maxSpeedForward));
+      _motor.setSpeed(map(speed, 0, MAX_SPEED, 0 + _minSpeedForward, _maxSpeedForward));
     } else if (speed < 0) {
       //DEBUG_PRINT("..BACKWARD"+String(speed));
-      _motor->run(BACKWARD);
-      _motor->setSpeed(map(speed, 0, -MAX_SPEED, 0 + _minSpeedBackward * (-1), _maxSpeedBackward) * (-1));
+      _motor.run(BACKWARD);
+      _motor.setSpeed(map(speed, 0, -MAX_SPEED, 0 + _minSpeedBackward * (-1), _maxSpeedBackward) * (-1));
     } else {
       //DEBUG_PRINT("..STOP");
       stop();
     }
   }
-  
+
   /** stop the pump */
   virtual void stop() override {
     _curSpeed = 0;
-    _motor->setSpeed(0);
+    _motor.setSpeed(0);
     //_motor->run(RELEASE);
   }
 
-  
+
   /** init method  please call in setup function */
   virtual void init() override {
-    _motor->setSpeed(0);
-    _motor->run(FORWARD);
-    _motor->run(RELEASE);
+    _motor.setSpeed(0);
+    _motor.run(FORWARD);
+    _motor.run(RELEASE);
   }
 
   /** loop method please call in loop function */
@@ -89,7 +91,6 @@ public:
       }
     }
   }*/
- 
 };
 
 #endif  // PUMP_H_
