@@ -15,31 +15,47 @@
 #endif
 
 /** PUMPS ****************************************************************************************/
-
+// #include "Pump.h"
 #include "AbstractPump.h" 
-#include "PumpMotorV2.h"
+
+// select your uno shield 
+#define MOTOR_SHIELD_V1
+//#define MOTOR_SHIELD_V2
+//#define RELAIS_SHIELD
+ 
+#ifdef MOTOR_SHIELD_V1
 #include "PumpMotorV1.h"
-#include "PumpRelay.h"
-
-// create/init the shield and pumps
-
-
-
-// create 4 pumps
-/*AbstractPump* pumps[] = { new PumpMotorV2(motorShield.getMotor(1)),
-                 new PumpMotorV2(motorShield.getMotor(2)),
-                 new PumpMotorV2(motorShield.getMotor(3)),
-                 new PumpMotorV2(motorShield.getMotor(4)) };*/
-
-
-AbstractPump* pumps[] = { new PumpRelay(7),
- new PumpRelay(8),
- new PumpRelay(13),
+AbstractPump* pumps[] = {  
  new PumpMotorV1(1),
- new PumpMotorV2(1)
+ new PumpMotorV1(2),
+ new PumpMotorV1(3),
+ new PumpMotorV1(4),
 };
-/** init the pumps please call in setup functions 
 
+#endif // MOTOR_SHIELD_V1
+
+#ifdef MOTOR_SHIELD_V2
+#include "PumpMotorV2.h"
+AbstractPump* pumps[] = {  
+ new PumpMotorV2(1),
+ new PumpMotorV2(2),
+ new PumpMotorV2(3),
+ new PumpMotorV2(4),
+};
+#endif // MOTOR_SHIELD_V2
+
+#ifdef RELAIS_SHIELD
+#include "PumpRelay.h"
+AbstractPump* pumps[] = {  
+ new PumpRelay(7),
+ new PumpRelay(6),
+ new PumpRelay(5),
+ new PumpRelay(4),
+};
+
+#endif // RELAIS_SHIELD
+
+/** init the pumps please call in setup functions 
 
 
 /** Organ ****************************************************************************************/
@@ -53,9 +69,9 @@ void setup() {
   /*DEBUG_PRINT("Init Pumps: ");
  */
 
+
   organ.init();
   DEBUG_PRINTLN("Success!");
-
   organ.setCurrentProgram(&fauntain2);
 }
 
